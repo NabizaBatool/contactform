@@ -1,5 +1,6 @@
 <?php
 include 'connect.php';
+
 $sno = $_GET['updateid'];
 // Usage of WHERE Clause to Update Data
 if (isset($_POST["done"])) {
@@ -9,6 +10,7 @@ if (isset($_POST["done"])) {
     $sql = "UPDATE `contactform` SET  `sno` = '$sno', `name` = '$name', `email`='$email' , `message`='$subject' WHERE `sno` = $sno";
     $result = mysqli_query($conn, $sql);
     if ($result) {
+        
         header('location:contactform.php');
     } else {
         echo "We could not update the record successfully";
@@ -42,14 +44,14 @@ if (isset($_POST["done"])) {
         <form method='post' action= 'update.php?updateid=<?php echo $sno?>'>
             <div class="form-group">
                 <label for="name">Name</label>
-                <input type="text" id="name" class="form-control" name="name" value=<?php echo $name; ?> placeholder="Your name..">
+                <input type="text" id="name" class="form-control" name="name" placeholder="Your Email here.." value=<?php echo $name; ?>>
             </div>
             <div class="form-group"><label for="email">Email:</label>
-                <input type="email" id="email" class="form-control" name="email" value=<?php echo $email; ?> placeholder="Your Email here..">
+                <input type="email" id="email" class="form-control" name="email" placeholder="Your Email here.." value=<?php echo $email; ?> >
             </div>
             <div class="form-group">
                 <label for="subject">Subject</label>
-                <textarea id="subject" class="form-control" name="subject"  placeholder="Write something.."  style="height:100px"><?php echo $subject; ?></textarea>
+                <textarea id="subject" class="form-control" name="subject"  placeholder="Write something.."  style="height:200px"><?php echo $subject; ?></textarea>
             </div>
             <button type="submit" name="done" class="btn btn-primary">Update</button>
 

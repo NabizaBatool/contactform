@@ -1,9 +1,6 @@
 <?php
 $insert = false;
-
 include 'connect.php';
-include 'delete.php';
-
 $nameErr = $emailErr = $subjectErr = "";
 $name = $email = $subject = "";
 
@@ -19,39 +16,40 @@ function test_input($data)
 // Creation of new record
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    if (!isset( $_POST['editid'])){
-    if (empty($_POST["name"])) {
-        $nameErr = "Name is required";
-    } else {
-        $name = test_input($_POST["name"]);
-    }
-
-    if (empty($_POST["email"])) {
-        $emailErr = "Email is required";
-    } else {
-        $email = test_input($_POST["email"]);
-    }
-
-    if (empty($_POST["subject"])) {
-        $subjectErr = "Subject is required";
-    } else {
-        $subject = test_input($_POST["subject"]);
-    }
-
-    if ($nameErr or $emailErr or $subjectErr) {
-        echo "$nameErr  <br>";
-        echo "$emailErr <br>";
-        echo "$subjectErr <br>";
-    } else {
-        $sql = "INSERT INTO `contactform` ( `name`, `email`, `message`) VALUES ( '$name', '$email' , '$subject')";
-        $insertion = mysqli_query($conn, $sql);
-        if ($insertion) {
-            $insert = true;
+    if (!isset($_POST['editid'])) {
+        if (empty($_POST["name"])) {
+            $nameErr = "Name is required";
         } else {
-            echo "The record was not inserted successfully because of this error ---> " . mysqli_error($conn);
+            $name = test_input($_POST["name"]);
+        }
+
+        if (empty($_POST["email"])) {
+            $emailErr = "Email is required";
+        } else {
+            $email = test_input($_POST["email"]);
+        }
+
+        if (empty($_POST["subject"])) {
+            $subjectErr = "Subject is required";
+        } else {
+            $subject = test_input($_POST["subject"]);
+        }
+
+        if ($nameErr or $emailErr or $subjectErr) {
+            echo "<div class='alert alert-warning alert-dismissible fade show' role='alert'>
+           <strong>Error!</strong><br>" . $nameErr . "<br>" . $emailErr . "<br>" . $subjectErr . "<button type='button' class='close' data-dismiss='alert' aria-label='Close'>
+           <span aria-hidden='true'>×</span></button></div>";
+        } else {
+            $sql = "INSERT INTO `contactform` ( `name`, `email`, `message`) VALUES ( '$name', '$email' , '$subject')";
+            $insertion = mysqli_query($conn, $sql);
+            if ($insertion) {
+                $insert = true;
+            } else {
+                echo "The record was not inserted successfully because of this error ---> " . mysqli_error($conn);
+            }
         }
     }
-}}
+}
 
 
 ?>
@@ -71,25 +69,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <body>
     <?php
     if ($insert) {
-        echo "<div class='alert alert-success alert-dismissible fade show' role='alert'>
+    echo "<div class='alert alert-success alert-dismissible fade show' role='alert'>
     <strong>Success!</strong> Your note has been inserted successfully
     <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
       <span aria-hidden='true'>×</span>
     </button>
   </div>";
     }
+   
+    ?>
 
-    ?>
-    <?php
-    if ($delete) {
-        echo "<div class='alert alert-success alert-dismissible fade show' role='alert'>
-    <strong>Success!</strong> Your note has been deleted successfully
-    <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
-      <span aria-hidden='true'>×</span>
-    </button>
-  </div>";
-    }
-    ?>
     <div class="container my-4">
         <form method='post' action="contactform.php">
             <div class="form-group">
